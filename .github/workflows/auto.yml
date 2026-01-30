@@ -30,10 +30,10 @@ jobs:
           </html>
           EOF
 
-      - name: Commit and push
+     - name: Commit and push
         run: |
-          git config user.name "auto-bot"
-          git config user.email "auto@bot.com"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add .
-          git commit -m "Add automated article"
+          git commit -m "Add automated article" || echo "No changes to commit"
           git push
