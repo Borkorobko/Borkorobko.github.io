@@ -2,37 +2,34 @@ name: Auto Article Generator
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 3 * * *"
 
 permissions:
-  contents: write 
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-     - name: Generate article
+
+      - name: Generate article
         run: |
-          echo "FILES IN REPO:"
-          ls -la
-
-          echo "KEYWORDS FILE CONTENT:"
-          cat keywords.txt
-
           mkdir -p posts
-          KEYWORD=$(head -n 1 keywords.txt)
-          SLUG=$(echo "$KEYWORD" | tr ' ' '-' | tr -cd 'a-zA-Z0-9-')
+          echo "<!DOCTYPE html>
+          <html>
+          <head>
+            <title>Best Espresso Grinder Under 200</title>
+          </head>
+          <body>
+            <h1>Best Espresso Grinder Under 200</h1>
+            <p>This article was generated automatically.</p>
+          </body>
+          </html>" > posts/test-article.html
 
-          echo "Keyword used: $KEYWORD"
-          echo "Slug: $SLUG"
-
-          echo "<h1>$KEYWORD</h1>" > posts/$SLUG.html
       - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git commit -m "Add automated article $DATE" || echo "Nothing to commit"
+          git commit -m "Add test article" || echo "Nothing to commit"
           git push
