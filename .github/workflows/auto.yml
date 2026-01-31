@@ -14,32 +14,38 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Generate article
+     - name: Generate article
         run: |
           mkdir -p posts
+          KEYWORD=$(shuf -n 1 keywords.txt)
+          SLUG=$(echo "$KEYWORD" | tr ' ' '-' | tr -cd 'a-zA-Z0-9-')
           DATE=$(date +'%Y-%m-%d')
-          FILENAME="article-$DATE.html"
 
-          cat <<EOF > posts/$FILENAME
+          cat <<EOF > posts/$SLUG.html
           <!DOCTYPE html>
           <html>
           <head>
-            <title>Automated Article for $DATE</title>
+            <title>$KEYWORD</title>
             <meta charset="UTF-8">
+            <meta name="description" content="Complete guide for $KEYWORD">
           </head>
           <body>
-            <h1>Automated Article ($DATE)</h1>
-            <p>This article was generated automatically.</p>
+            <h1>$KEYWORD</h1>
 
-            <h2>Why automation matters</h2>
-            <p>Automation allows systems to operate without human intervention.</p>
+            <p>If you're searching for $KEYWORD, this guide will help you make the right choice.</p>
 
-            <h2>What happens next</h2>
-            <p>This site will continue to grow every day.</p>
+            <h2>What to look for</h2>
+            <p>Before choosing, consider quality, price, and long-term value.</p>
+
+            <h2>Top options</h2>
+            <p>Below are some of the best options available right now.</p>
+
+            <h2>Final verdict</h2>
+            <p>The best choice depends on your specific needs and budget.</p>
+
           </body>
           </html>
           EOF
-
       - name: Commit and push
         run: |
           git config user.name "github-actions"
