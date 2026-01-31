@@ -2,26 +2,48 @@ name: Auto Article Generator
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"
 
 permissions:
   contents: write
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Create test file
+      - name: Generate article
         run: |
           mkdir -p posts
-          echo "Automation works" > posts/hello.txt
+          DATE=$(date +'%Y-%m-%d')
+          FILENAME="article-$DATE.html"
+
+          cat <<EOF > posts/$FILENAME
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>Automated Article for $DATE</title>
+            <meta charset="UTF-8">
+          </head>
+          <body>
+            <h1>Automated Article ($DATE)</h1>
+            <p>This article was generated automatically.</p>
+
+            <h2>Why automation matters</h2>
+            <p>Automation allows systems to operate without human intervention.</p>
+
+            <h2>What happens next</h2>
+            <p>This site will continue to grow every day.</p>
+          </body>
+          </html>
+          EOF
 
       - name: Commit and push
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git commit -m "Test automation" || echo "Nothing to commit"
+          git commit -m "Add automated article $DATE" || echo "Nothing to commit"
           git push
