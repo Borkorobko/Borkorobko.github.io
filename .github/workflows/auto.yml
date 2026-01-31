@@ -10,26 +10,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Generate article
+      - name: Show environment
         run: |
-          mkdir -p posts
-          echo "<!DOCTYPE html>
-          <html>
-          <head>
-            <title>Best Espresso Grinder Under 200</title>
-          </head>
-          <body>
-            <h1>Best Espresso Grinder Under 200</h1>
-            <p>This article was generated automatically.</p>
-          </body>
-          </html>" > posts/test-article.html
+          pwd
+          ls -la
+
+      - name: Create proof file
+        run: |
+          echo "THIS FILE PROVES THE WORKFLOW WORKED" > PROOF.txt
+          ls -la
 
       - name: Commit and push
         run: |
+          git status
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add .
-          git commit -m "Add test article" || echo "Nothing to commit"
+          git commit -m "Add proof file" || echo "Nothing to commit"
           git push
