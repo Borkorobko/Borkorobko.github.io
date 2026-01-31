@@ -1,0 +1,27 @@
+name: Auto Article Generator
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Create test file
+        run: |
+          mkdir -p posts
+          echo "Automation works" > posts/hello.txt
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Test automation" || echo "Nothing to commit"
+          git push
