@@ -6,7 +6,7 @@ on:
     - cron: "0 3 * * *"
 
 permissions:
-  contents: write
+  contents: write 
 
 jobs:
   build:
