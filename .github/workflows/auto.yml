@@ -1,16 +1,33 @@
-      - name: Generate article
+     name: Auto Article Generator
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Show environment
         run: |
-          echo "FILES IN REPO:"
+          pwd
           ls -la
 
-          echo "KEYWORDS FILE CONTENT:"
-          cat keywords.txt
+      - name: Create proof file
+        run: |
+          echo "THIS FILE PROVES THE WORKFLOW WORKED" > PROOF.txt
+          ls -la
 
-          mkdir -p posts
-          KEYWORD=$(head -n 1 keywords.txt)
-          SLUG=$(echo "$KEYWORD" | tr ' ' '-' | tr -cd 'a-zA-Z0-9-')
-
-          echo "Keyword used: $KEYWORD"
-          echo "Slug: $SLUG"
-
-          echo "<h1>$KEYWORD</h1>" > posts/$SLUG.html
+      - name: Commit and push
+        run: |
+          git status
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add .
+          git commit -m "Add proof file" || echo "Nothing to commit"
+          git push
